@@ -15,18 +15,23 @@ const encryptor = encryptTransform({
 })
 
 const persistConfig = {
-    key: 'root',
+    key: 'posts',
     storage,
     // transforms: [encryptor],
 }
 
-const persistedReducer = persistReducer(persistConfig, postsReducer)
+const persistedPosts = persistReducer(persistConfig, postsReducer)
+const persistedContent = persistReducer({
+    key: 'content',
+    storage,
+}, contentReducer)
 
 export const store = configureStore({
     reducer: {
         posts: postsReducer,
-        content: contentReducer,
-        persisted: persistedReducer,
+        // content: contentReducer,
+        content: persistedContent,
+        persisted: persistedPosts,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
@@ -36,5 +41,5 @@ export const store = configureStore({
         }),
 })
 
-// setupListeners(store.dispatch)
+setupListeners(store.dispatch)
 export const persistor = persistStore(store)
