@@ -3,7 +3,7 @@ import storage from 'redux-persist/lib/storage';
 import { setupListeners } from '@reduxjs/toolkit/query'
 // import storage from 'redux-persist/lib/storage/session';
 import { encryptTransform } from "redux-persist-transform-encrypt";
-import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import { persistReducer, persistStore, createTransform, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import postsReducer from './reducers/postsReducer'
 import contentReducer from './reducers/contentReducer'
 
@@ -17,7 +17,11 @@ const encryptor = encryptTransform({
 const persistConfig = {
     key: 'posts',
     storage,
-    // transforms: [encryptor],
+    whitelist: [
+        'app',
+        'user',
+    ],
+    transforms: [encryptor],
 }
 
 const persistedPosts = persistReducer(persistConfig, postsReducer)
@@ -28,10 +32,11 @@ const persistedContent = persistReducer({
 
 export const store = configureStore({
     reducer: {
-        posts: postsReducer,
+        // posts: postsReducer,
         // content: contentReducer,
+        devTools: process.env.NODE_ENV !== 'production',
         content: persistedContent,
-        persisted: persistedPosts,
+        posts: persistedPosts,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
