@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchPosts } from '../../store/reducers/postsReducer';
 import TableData from '../../components/tabledata';
+import { AuthContext } from '../../store/context/AuthContext';
 
 const Posts = () => {
     const dispatch = useDispatch()
     const { posts, status, error } = useSelector((state) => state.posts);
+    const contextValue = useContext(AuthContext);
     let content;
 
     useEffect(() => {
         dispatch(fetchPosts())
     }, []);
+
+    console.log(contextValue)
 
     if (status === "loading") {
         content = <div className="text-center my-5">Loading...</div>
