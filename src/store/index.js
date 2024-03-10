@@ -30,18 +30,26 @@ const persistedContent = persistReducer({
     storage,
 }, contentReducer)
 
+
+const loggerMiddleware = store => next => action => {
+    console.log('Dispatching:', action);
+    const result = next(action);
+    console.log('State after dispatch:', store.getState());
+    return result;
+};
+
 export const store = configureStore({
     reducer: {
         // posts: postsReducer,
         // content: contentReducer,
-        devTools: process.env.NODE_ENV !== 'production',
+        // devTools: process.env.NODE_ENV !== 'production',
         content: persistedContent,
         posts: persistedPosts,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
-                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],    
             },
         }),
 })
