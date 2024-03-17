@@ -6,6 +6,7 @@ import { encryptTransform } from "redux-persist-transform-encrypt";
 import { persistReducer, persistStore, createTransform, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import postsReducer from './reducers/postsReducer'
 import contentReducer from './reducers/contentReducer'
+import themeReducer from './reducers/themeReducer'
 
 const encryptor = encryptTransform({
     secretKey: "my-super-secret-key-999",
@@ -45,6 +46,7 @@ export const store = configureStore({
         // devTools: process.env.NODE_ENV !== 'production',
         content: persistedContent,
         posts: persistedPosts,
+        theme: themeReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

@@ -14,8 +14,6 @@ const Posts = () => {
         dispatch(fetchPosts())
     }, []);
 
-    console.log(contextValue)
-
     if (status === "loading") {
         content = <div className="text-center my-5">Loading...</div>
     } else if (status === "succeeded") {
